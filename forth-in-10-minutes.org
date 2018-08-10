@@ -2,6 +2,7 @@
 #+title: Forth 十分鐘
 
 - 二〇一八年八月十日
+- A [[https://github.com/rosettacash][RosettaCash]] talk
 
 ------
 
