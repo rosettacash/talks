@@ -1,4 +1,4 @@
-### talks by members of rosettacash
+### Talks by Members of RosettaCash
 
 ------
 
