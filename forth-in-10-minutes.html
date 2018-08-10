@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-08-10 Fri 14:49 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Forth 十分鐘</title>
+<meta name="generator" content="Org-mode" />
+<link rel="stylesheet" href="css/org-page-no-toc.css"/>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Forth 十分鐘</h1>
+<ul class="org-ul">
+<li><p>二〇一八年八月十日</p></li></ul>
+
+<hr  />
+
+<ul class="org-ul">
+<li><p>數據棧 與 基本函數</p></li></ul>
+
+<div class="org-src-container">
+
+<pre class="src src-return-stack"><span style="color: #fd971f; font-weight: bold;">1</span> <span style="color: #fd971f; font-weight: bold;">2</span> + dup *
+
+<span style="color: #ae81ff; font-weight: bold;">------</span>
+
+<span style="color: #fd971f; font-weight: bold;">1</span>
+&gt; <span style="color: #fd971f; font-weight: bold;">1</span>
+
+<span style="color: #fd971f; font-weight: bold;">2</span>
+&gt; <span style="color: #fd971f; font-weight: bold;">1</span> <span style="color: #fd971f; font-weight: bold;">2</span>
+
++
+&gt; <span style="color: #fd971f; font-weight: bold;">3</span>
+
+dup
+&gt; <span style="color: #fd971f; font-weight: bold;">3</span> <span style="color: #fd971f; font-weight: bold;">3</span>
+
+*
+&gt; <span style="color: #fd971f; font-weight: bold;">9</span>
+</pre>
+</div>
+
+<hr  />
+
+<ul class="org-ul">
+<li><p>返回棧 與 複合函數</p></li></ul>
+
+<div class="org-src-container">
+
+<pre class="src src-return-stack"><span style="color: #ffff00; font-weight: bold;">:</span> <span style="color: #ef5939; font-weight: bold;">square</span>   dup * <span style="color: #ffff00; font-weight: bold;">;</span>
+<span style="color: #ffff00; font-weight: bold;">:</span> <span style="color: #ef5939; font-weight: bold;">power4</span>   square square <span style="color: #ffff00; font-weight: bold;">;</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="src src-return-stack">&gt; <span style="color: #fd971f; font-weight: bold;">2</span>
+
+| <span style="color: #ae81ff; font-weight: bold;">--</span> <span style="color: #dc322f; font-weight: bold;">[</span> <span style="color: #fd971f; font-weight: bold;">(square)</span> <span style="color: #dc322f; font-weight: bold;">]</span>
+       <span style="color: #ef5939; font-weight: bold;">(square)</span>
+
+       <span style="color: #ef5939; font-weight: bold;">(square)</span>
+| <span style="color: #ae81ff; font-weight: bold;">--</span> <span style="color: #dc322f; font-weight: bold;">[</span> <span style="color: #fd971f; font-weight: bold;">(square)</span> <span style="color: #dc322f; font-weight: bold;">]</span> <span style="color: #ae81ff; font-weight: bold;">--</span> <span style="color: #dc322f; font-weight: bold;">[</span> <span style="color: #fd971f; font-weight: bold;">(dup)</span> <span style="color: #dc322f; font-weight: bold;">]</span>
+                        <span style="color: #ef5939; font-weight: bold;">(*)</span>
+
+&gt; <span style="color: #fd971f; font-weight: bold;">2</span> <span style="color: #fd971f; font-weight: bold;">2</span>
+
+       <span style="color: #ef5939; font-weight: bold;">(square)</span>        <span style="color: #ef5939; font-weight: bold;">(dup)</span>
+| <span style="color: #ae81ff; font-weight: bold;">--</span> <span style="color: #dc322f; font-weight: bold;">[</span> <span style="color: #fd971f; font-weight: bold;">(square)</span> <span style="color: #dc322f; font-weight: bold;">]</span> <span style="color: #ae81ff; font-weight: bold;">--</span> <span style="color: #dc322f; font-weight: bold;">[</span>  <span style="color: #fd971f; font-weight: bold;">(*)</span>  <span style="color: #dc322f; font-weight: bold;">]</span>
+
+&gt; <span style="color: #fd971f; font-weight: bold;">4</span>
+
+       <span style="color: #ef5939; font-weight: bold;">(square)</span>
+| <span style="color: #ae81ff; font-weight: bold;">--</span> <span style="color: #dc322f; font-weight: bold;">[</span> <span style="color: #fd971f; font-weight: bold;">(square)</span> <span style="color: #dc322f; font-weight: bold;">]</span>
+
+
+| <span style="color: #ae81ff; font-weight: bold;">--</span> <span style="color: #dc322f; font-weight: bold;">[</span> <span style="color: #fd971f; font-weight: bold;">(dup)</span> <span style="color: #dc322f; font-weight: bold;">]</span>
+        <span style="color: #ef5939; font-weight: bold;">(*)</span>
+
+&gt; <span style="color: #fd971f; font-weight: bold;">4</span> <span style="color: #fd971f; font-weight: bold;">4</span>
+
+       <span style="color: #ef5939; font-weight: bold;">(dup)</span>
+| <span style="color: #ae81ff; font-weight: bold;">--</span> <span style="color: #dc322f; font-weight: bold;">[</span>  <span style="color: #fd971f; font-weight: bold;">(*)</span>  <span style="color: #dc322f; font-weight: bold;">]</span>
+
+&gt; <span style="color: #fd971f; font-weight: bold;">8</span>
+</pre>
+</div>
+
+<hr  />
+
+<ul class="org-ul">
+<li><p>例</p></li></ul>
+
+<div class="org-src-container">
+
+<pre class="src src-return-stack"><span style="color: #fd971f; font-weight: bold;">100</span> constant n
+<span style="color: #ffff00; font-weight: bold;">:</span> <span style="color: #ef5939; font-weight: bold;">array</span>   create here n erase n allot does&gt; + <span style="color: #ffff00; font-weight: bold;">;</span>
+array door
+
+<span style="color: #ffff00; font-weight: bold;">:</span> <span style="color: #ef5939; font-weight: bold;">toggle</span>   door dup c@ invert swap c! <span style="color: #ffff00; font-weight: bold;">;</span>
+<span style="color: #ffff00; font-weight: bold;">:</span> <span style="color: #ef5939; font-weight: bold;">pass</span>   dup 1+ n rot do i toggle dup +loop drop <span style="color: #ffff00; font-weight: bold;">;</span>
+<span style="color: #ffff00; font-weight: bold;">:</span> <span style="color: #ef5939; font-weight: bold;">passes</span>   <span style="color: #fd971f; font-weight: bold;">0</span> do i pass loop <span style="color: #ffff00; font-weight: bold;">;</span>
+
+<span style="color: #ffff00; font-weight: bold;">:</span> <span style="color: #ef5939; font-weight: bold;">.open</span>   door c@ if ." open" else ." closed" then <span style="color: #ffff00; font-weight: bold;">;</span>
+<span style="color: #ffff00; font-weight: bold;">:</span> <span style="color: #ef5939; font-weight: bold;">.door</span>   ." door <span style="color: #e6db74;">" dup 1+ . ."</span> is " .open cr <span style="color: #ffff00; font-weight: bold;">;</span>
+<span style="color: #ffff00; font-weight: bold;">:</span> <span style="color: #ef5939; font-weight: bold;">output</span>   n <span style="color: #fd971f; font-weight: bold;">0</span> do i .door loop <span style="color: #ffff00; font-weight: bold;">;</span>
+
+<span style="color: #ffff00; font-weight: bold;">:</span> <span style="color: #ef5939; font-weight: bold;">answer</span>   <span style="color: #fd971f; font-weight: bold;">100</span> passes  output <span style="color: #ffff00; font-weight: bold;">;</span>
+</pre>
+</div>
+
+<hr  />
+
+<ul class="org-ul">
+<li><p>語言特性</p><p><ul class="org-ul"></p><p><li><p>無局部變量 &#x2013; 置換棧中元素以代之</p></li></p><p><li><p>無類型系統</p><p><ul class="org-ul"></p><p><li><p>無靜態類型檢查</p></li></p><p><li><p>無動態類型標籤</p></li></ul></p></li></p><p><li><p>無語法解析 &#x2013; 純粹後綴表達式</p></li></p><p><li><p>無內存管理機制 &#x2013; 直接讀寫內存</p></li></p><p><li><p>無文件系統 &#x2013; 以內存或硬盤塊爲單位保存代碼</p></li></ul></p></li></ul>
+
+<hr  />
+
+<ul class="org-ul">
+<li><p>風格</p><p><ul class="org-ul"></p><p><li><p>函數分解較細緻 &#x2013; 大函數劃分爲可以重用的小函數</p></li></p><p><li><p>一兩行爲宜 五六行爲多</p></li></ul></p></li></ul>
+
+<hr  />
+
+<ul class="org-ul">
+<li><p>線串碼解釋器 &#x2013; threaded code interpreter</p></li></ul>
+
+<div class="org-src-container">
+
+<pre class="src src-return-stack">       <span style="color: #f92672; font-weight: bold;">(jo)</span>
+       <span style="color: #f92672; font-weight: bold;">(jo)</span>        <span style="color: #f92672; font-weight: bold;">(jo)</span>
+| <span style="color: #ae81ff; font-weight: bold;">--</span> <span style="color: #dc322f; font-weight: bold;">[</span> <span style="color: #f92672; font-weight: bold;">(jo)</span> <span style="color: #dc322f; font-weight: bold;">]</span> <span style="color: #ae81ff; font-weight: bold;">--</span> <span style="color: #dc322f; font-weight: bold;">[</span> <span style="color: #f92672; font-weight: bold;">(jo)</span> <span style="color: #dc322f; font-weight: bold;">]</span> <span style="color: #ae81ff; font-weight: bold;">--</span> <span style="color: #dc322f; font-weight: bold;">[</span> <span style="color: #f92672; font-weight: bold;">(jo)</span> <span style="color: #dc322f; font-weight: bold;">]</span>
+       <span style="color: #f92672; font-weight: bold;">(jo)</span>        <span style="color: #f92672; font-weight: bold;">(jo)</span>        <span style="color: #f92672; font-weight: bold;">(jo)</span>
+                               <span style="color: #f92672; font-weight: bold;">(jo)</span>
+</pre>
+</div>
+
+<ul class="org-ul">
+<li><p><a href="http://www.bradrodriguez.com/papers/moving1.htm">多種實現方式</a></p></li></ul>
+
+<div class="org-src-container">
+
+<pre class="src src-jojo">- indirect   threaded code
+- direct     threaded code
+- subroutine threaded code
+- token      threaded code
+- dynamic    threaded code
+</pre>
+</div>
+
+<ul class="org-ul">
+<li><p>適合用汇编实现</p></li></ul>
+
+<div class="org-src-container">
+
+<pre class="src src-asm"><span style="color: #93E0E3;">code</span> '+', plus
+  <span style="color: #F0DFAF; font-weight: bold;">pop</span> eax                    ; get n2
+  <span style="color: #F0DFAF; font-weight: bold;">add</span> ebx, eax               ; add it to n1
+  <span style="color: #F0DFAF; font-weight: bold;">next</span>
+
+<span style="color: #93E0E3;">code</span> '*', star
+  <span style="color: #F0DFAF; font-weight: bold;">pop</span> eax                    ; get n1
+  <span style="color: #F0DFAF; font-weight: bold;">mul</span> ebx                    ; multiply
+  <span style="color: #F0DFAF; font-weight: bold;">mov</span> ebx, eax               ; return result
+  <span style="color: #F0DFAF; font-weight: bold;">next</span>
+
+<span style="color: #93E0E3;">code</span> 'dup', dup
+  <span style="color: #F0DFAF; font-weight: bold;">push</span> ebx                   ; push copy of top stack item
+  <span style="color: #F0DFAF; font-weight: bold;">next</span>
+</pre>
+</div>
+
+<ul class="org-ul">
+<li><p>內部解釋器 &#x2013; 嵌入在汇编語言中的 forth 代碼</p></li></ul>
+
+<div class="org-src-container">
+
+<pre class="src src-asm">; parse a word from input, delimited by c1
+;       ( c1 --- a1 n1 )
+<span style="color: #93E0E3;">colon</span> 'parse', parse
+  <span style="color: #F0DFAF; font-weight: bold;">dd</span> tor
+  <span style="color: #F0DFAF; font-weight: bold;">dd</span> source, toin
+  <span style="color: #F0DFAF; font-weight: bold;">dd</span> sstring, over, swap
+  <span style="color: #F0DFAF; font-weight: bold;">dd</span> rto
+  <span style="color: #F0DFAF; font-weight: bold;">dd</span> scan_eol, tor
+  <span style="color: #F0DFAF; font-weight: bold;">dd</span> over, minus, dup
+  <span style="color: #F0DFAF; font-weight: bold;">dd</span> rto, znotequals, minus
+  <span style="color: #F0DFAF; font-weight: bold;">dd</span> zplusstoreto, toin_b
+  <span style="color: #F0DFAF; font-weight: bold;">dd</span> exit
+</pre>
+</div>
+
+<ul class="org-ul">
+<li><p>上述代碼摘自 &#x2013; <a href="https://github.com/mark4th/x4">mark4th/x4</a></p></li></ul>
+
+<hr  />
+
+<ul class="org-ul">
+<li><p>歷史</p><p><ul class="org-ul"></p><p><li><p>Programming a Problem Oriented Language, a.k.a. POL, 1970</p></li></p><p><li><p><a href="https://en.wikipedia.org/wiki/Charles_H._Moore">Charles H. Moore</a></p></li></ul></p></li>
+
+<li><p>形而上</p><p><ul class="org-ul"></p><p><li><p><a href="http://thinking-forth.sourceforge.net/">THINKING FORTH &#x2013; A Language and Philosophy for Solving Problems</a>, 2004</p></li></p><p><li><p>Leo Brodie</p></li></ul></p></li></ul>
+
+<hr  />
+
+<ul class="org-ul">
+<li><p>社區</p><p></p><p><ul class="org-ul"></p><p><li><p>標準 &#x2013; (<a href="http://forth.sourceforge.net/std/dpans/">ANSI forth</a>)</p></li></p><p></p><p><li><p><a href="http://forthhub.github.io/wiki/forth-systems/?perPage=100">多實現</a></p><p><ul class="org-ul"></p><p><li><p>社區分裂</p></li></p><p><li><p>無標準模塊系統</p></li></p><p><li><p>代碼不可移植</p></li></p><p><li><p>大多數 forth 程序員都會實現 forth</p></li></p><p><li><p>幾乎沒有獨立的 forth 應用程序</p><p>各個應用程序皆嵌入在某個獨特的 forth 實現中</p></li></ul></p></li></p><p></p><p><li><p>多派生 &#x2013; 諸多值得學習的設計</p><p><ul class="org-ul"></p><p><li><p>(<a href="http://www.greenarraychips.com/">colorforth</a>)</p></li></p><p><li><p>(<a href="https://www.latrobe.edu.au/humanities/research/research-projects/past-projects/joy-programming-language">joy</a>)</p></li></p><p><li><p>(<a href="https://factorcode.org/">factor</a>)</p></li></p><p><li><p>(<a href="http://forthworks.com/">retro</a>)</p></li></p><p><li><p>(<a href="http://kittenlang.org/">kitten</a>)</p></li></p><p><li><p>(<a href="https://github.com/phreda4/reda4">:r4</a>)</p></li></p><p><li><p>(<a href="http://www.oforth.com/">Oforth</a>)</p></li></p><p><li><p>(<a href="http://8th-dev.com">8th</a>)</p></li></p><p><li><p>(<a href="https://github.com/gnooth/feline">feline</a>)</p></li></ul></p></li></ul></p></li></ul>
+
+<hr  />
+
+<ul class="org-ul">
+<li><p>漢語 &#x2013; <a href="https://github.com/szdiy/ada-shield/blob/master/show.org">例</a></p></li></ul>
+
+<hr  />
+
+<ul class="org-ul">
+<li><p>巧譯</p></li></ul>
+
+<div class="org-src-container">
+
+<pre class="src src-return-stack"><span style="color: #ae81ff; font-weight: bold;">-</span> &#26855; <span style="color: #ae81ff; font-weight: bold;">-</span>
+    &#26820; <span style="color: #ae81ff; font-weight: bold;">--</span> drop
+    &#24489; <span style="color: #ae81ff; font-weight: bold;">--</span> dup
+    &#36493; <span style="color: #ae81ff; font-weight: bold;">--</span> over
+    &#34255; <span style="color: #ae81ff; font-weight: bold;">--</span> tuck
+    &#25563; <span style="color: #ae81ff; font-weight: bold;">--</span> swap
+<span style="color: #ae81ff; font-weight: bold;">-</span> &#25903; <span style="color: #ae81ff; font-weight: bold;">-</span>
+    &#21063;   <span style="color: #ae81ff; font-weight: bold;">--</span> if
+    &#21542;&#21063; <span style="color: #ae81ff; font-weight: bold;">--</span> else
+    &#20877;   <span style="color: #ae81ff; font-weight: bold;">--</span> then
+</pre>
+</div>
+
+<ul class="org-ul">
+<li><p>純</p></li></ul>
+
+<div class="org-src-container">
+
+<pre class="src src-return-stack">&#22827; &#38542;&#20056;
+   &#24489; &#19968;&#20046; &#21063; &#24050;&#30691;
+   &#20877; &#24489; &#19968; &#28187; &#38542;&#20056; &#20056; &#24050;&#30691;
+&#32773; &#21205;&#35422;&#20063;
+</pre>
+</div>
+
+<hr  />
+
+<ul class="org-ul">
+<li><p>未完待續 &#x2026;</p></li></ul>
+
+<hr  />
+</div>
+<div id="postamble" class="status">
+<p class="date">Created: 2018-08-10 Fri 14:49</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

@@ -1,0 +1,241 @@
+#+html_head: <link rel="stylesheet" href="css/org-page-no-toc.css"/>
+#+title: Forth 十分鐘
+
+- 二〇一八年八月十日
+
+------
+
+- 數據棧 與 基本函數
+
+#+begin_src return-stack
+1 2 + dup *
+
+------
+
+1
+> 1
+
+2
+> 1 2
+
++
+> 3
+
+dup
+> 3 3
+
+*
+> 9
+
+#+end_src
+
+------
+
+- 返回棧 與 複合函數
+
+#+begin_src return-stack
+: square   dup * ;
+: power4   square square ;
+#+end_src
+
+#+begin_src return-stack
+
+> 2
+
+| -- [ (square) ]
+       (square)
+
+       (square)
+| -- [ (square) ] -- [ (dup) ]
+                        (*)
+
+> 2 2
+
+       (square)        (dup)
+| -- [ (square) ] -- [  (*)  ]
+
+> 4
+
+       (square)
+| -- [ (square) ]
+
+
+| -- [ (dup) ]
+        (*)
+
+> 4 4
+
+       (dup)
+| -- [  (*)  ]
+
+> 8
+
+#+end_src
+
+------
+
+- 例
+
+#+begin_src return-stack
+100 constant n
+: array   create here n erase n allot does> + ;
+array door
+
+: toggle   door dup c@ invert swap c! ;
+: pass   dup 1+ n rot do i toggle dup +loop drop ;
+: passes   0 do i pass loop ;
+
+: .open   door c@ if ." open" else ." closed" then ;
+: .door   ." door " dup 1+ . ." is " .open cr ;
+: output   n 0 do i .door loop ;
+
+: answer   100 passes  output ;
+#+end_src
+
+------
+
+- 語言特性
+  - 無局部變量 -- 置換棧中元素以代之
+  - 無類型系統
+    - 無靜態類型檢查
+    - 無動態類型標籤
+  - 無語法解析 -- 純粹後綴表達式
+  - 無內存管理機制 -- 直接讀寫內存
+  - 無文件系統 -- 以內存或硬盤塊爲單位保存代碼
+
+------
+
+- 風格
+  - 函數分解較細緻 -- 大函數劃分爲可以重用的小函數
+  - 一兩行爲宜 五六行爲多
+
+------
+
+- 線串碼解釋器 -- threaded code interpreter
+
+#+begin_src return-stack
+       (jo)
+       (jo)        (jo)
+| -- [ (jo) ] -- [ (jo) ] -- [ (jo) ]
+       (jo)        (jo)        (jo)
+                               (jo)
+#+end_src
+
+- [[http://www.bradrodriguez.com/papers/moving1.htm][多種實現方式]]
+
+#+begin_src jojo
+  - indirect   threaded code
+  - direct     threaded code
+  - subroutine threaded code
+  - token      threaded code
+  - dynamic    threaded code
+#+end_src
+
+- 適合用汇编实现
+
+#+begin_src asm
+code '+', plus
+  pop eax                    ; get n2
+  add ebx, eax               ; add it to n1
+  next
+
+code '*', star
+  pop eax                    ; get n1
+  mul ebx                    ; multiply
+  mov ebx, eax               ; return result
+  next
+
+code 'dup', dup
+  push ebx                   ; push copy of top stack item
+  next
+#+end_src
+
+- 內部解釋器 -- 嵌入在汇编語言中的 forth 代碼
+
+#+begin_src asm
+; parse a word from input, delimited by c1
+;       ( c1 --- a1 n1 )
+colon 'parse', parse
+  dd tor
+  dd source, toin
+  dd sstring, over, swap
+  dd rto
+  dd scan_eol, tor
+  dd over, minus, dup
+  dd rto, znotequals, minus
+  dd zplusstoreto, toin_b
+  dd exit
+#+end_src
+
+- 上述代碼摘自 -- [[https://github.com/mark4th/x4][mark4th/x4]]
+
+------
+
+- 歷史
+  - Programming a Problem Oriented Language, a.k.a. POL, 1970
+  - [[https://en.wikipedia.org/wiki/Charles_H._Moore][Charles H. Moore]]
+
+- 形而上
+  - [[http://thinking-forth.sourceforge.net/][THINKING FORTH -- A Language and Philosophy for Solving Problems]], 2004
+  - Leo Brodie
+
+------
+
+- 社區
+
+  - 標準 -- ([[http://forth.sourceforge.net/std/dpans/][ANSI forth]])
+
+  - [[http://forthhub.github.io/wiki/forth-systems/?perPage=100][多實現]]
+    - 社區分裂
+    - 無標準模塊系統
+    - 代碼不可移植
+    - 大多數 forth 程序員都會實現 forth
+    - 幾乎沒有獨立的 forth 應用程序
+      各個應用程序皆嵌入在某個獨特的 forth 實現中
+
+  - 多派生 -- 諸多值得學習的設計
+    - ([[http://www.greenarraychips.com/][colorforth]])
+    - ([[https://www.latrobe.edu.au/humanities/research/research-projects/past-projects/joy-programming-language][joy]])
+    - ([[https://factorcode.org/][factor]])
+    - ([[http://forthworks.com/][retro]])
+    - ([[http://kittenlang.org/][kitten]])
+    - ([[https://github.com/phreda4/reda4][:r4]])
+    - ([[http://www.oforth.com/][Oforth]])
+    - ([[http://8th-dev.com][8th]])
+    - ([[https://github.com/gnooth/feline][feline]])
+
+------
+
+- 漢語 -- [[https://github.com/szdiy/ada-shield/blob/master/show.org][例]]
+
+------
+
+- 巧譯
+
+#+begin_src return-stack
+- 棧 -
+    棄 -- drop
+    復 -- dup
+    躍 -- over
+    藏 -- tuck
+    換 -- swap
+- 支 -
+    則   -- if
+    否則 -- else
+    再   -- then
+#+end_src
+
+- 純
+
+#+begin_src return-stack
+夫 階乘
+   復 一乎 則 已矣
+   再 復 一 減 階乘 乘 已矣
+者 動詞也
+#+end_src
+
+------
+
+- 未完待續 ...
+
+------
